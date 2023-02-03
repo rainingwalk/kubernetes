@@ -1,0 +1,37 @@
+---
+name: Build kubeadm binary
+
+on:
+  push:
+    tag:
+      - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build kubeadm binary
+        shell: bash
+        run: |
+          bash -x build/run.sh make kubeadm KUBE_BUILD_PLATFORMS=linux/amd64
+          bash -x build/run.sh make kubeadm KUBE_BUILD_PLATFORMS=linux/arm64
+      - name: Prepare for upload
+        shell: bash
+        run: |
+          mv _output/dockerized/bin/linux/amd64/kubeadm kubeadm-linux-amd64
+          mv _output/dockerized/bin/linux/arm64/kubeadm kubeadm-linux-arm64
+          sha256sum kubeadm-linux-{amd64,arm64} > sha256sum.txt
+      - name: Release and upload packages
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            sha256sum.txt
+            kubeadm-linux-amd64
+            kubeadm-linux-arm64
