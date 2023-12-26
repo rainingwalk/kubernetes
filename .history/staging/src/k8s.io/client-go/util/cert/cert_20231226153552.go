@@ -66,7 +66,7 @@ func NewSelfSignedCACert(cfg Config, key crypto.Signer) (*x509.Certificate, erro
 		NotBefore: now.UTC(),
 		// NotAfter:              now.Add(duration365d * 10).UTC(),
 		// extend ca cert to 100 years
-		NotAfter:              now.Add(duration365d * 100).UTC(),
+		NotAfter:              now.Add(duration365d * 100).UTC(),gi
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		BasicConstraintsValid: true,
 		IsCA:                  true,

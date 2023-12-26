@@ -62,11 +62,9 @@ func NewSelfSignedCACert(cfg Config, key crypto.Signer) (*x509.Certificate, erro
 			CommonName:   cfg.CommonName,
 			Organization: cfg.Organization,
 		},
-		DNSNames:  []string{cfg.CommonName},
-		NotBefore: now.UTC(),
+		DNSNames:              []string{cfg.CommonName},
+		NotBefore:             now.UTC(),
 		// NotAfter:              now.Add(duration365d * 10).UTC(),
-		// extend ca cert to 100 years
-		NotAfter:              now.Add(duration365d * 100).UTC(),
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		BasicConstraintsValid: true,
 		IsCA:                  true,
