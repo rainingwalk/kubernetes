@@ -85,11 +85,12 @@ func EnforceVersionPolicies(versionGetter VersionGetter, newK8sVersionStr string
 		tooLargeUpgradeSkewErr := errors.Errorf("Specified version to upgrade to %q is too high; kubeadm can upgrade only %d minor version at a time", newK8sVersionStr, MaximumAllowedMinorVersionUpgradeSkew)
 		// If the version that we're about to upgrade to is a released version, we should fully enforce this policy
 		// If the version is a CI/dev/experimental version, it's okay to jump two minor version steps, but then require the -f flag
-		if len(newK8sVersion.PreRelease()) == 0 {
-			skewErrors.Mandatory = append(skewErrors.Mandatory, tooLargeUpgradeSkewErr)
-		} else {
-			skewErrors.Skippable = append(skewErrors.Skippable, tooLargeUpgradeSkewErr)
-		}
+		// 注释掉以下，使可以跨次要版本升级
+		// if len(newK8sVersion.PreRelease()) == 0 {
+		// 	skewErrors.Mandatory = append(skewErrors.Mandatory, tooLargeUpgradeSkewErr)
+		// } else {
+		// 	skewErrors.Skippable = append(skewErrors.Skippable, tooLargeUpgradeSkewErr)
+		// }
 	}
 
 	// kubeadm doesn't support downgrades between two minor versions; e.g. a v1.9 -> v1.7 downgrade is not supported right away
