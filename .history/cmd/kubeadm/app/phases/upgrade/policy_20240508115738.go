@@ -80,8 +80,7 @@ func EnforceVersionPolicies(versionGetter VersionGetter, newK8sVersionStr string
 		skewErrors.Mandatory = append(skewErrors.Mandatory, errors.Errorf("Specified version to upgrade to %q is equal to or lower than the minimum supported version %q. Please specify a higher version to upgrade to", newK8sVersionStr, clusterVersionStr))
 	}
 
-	// 注释以下判断，以使kubeadm可以跨次要版本升级
-	// kubeadm doesn't support upgrades between two minor versions; e.g. a v1.7 -> v1.9 upgrade is not supported right away
+	// // kubeadm doesn't support upgrades between two minor versions; e.g. a v1.7 -> v1.9 upgrade is not supported right away
 	// if newK8sVersion.Minor() > clusterVersion.Minor()+MaximumAllowedMinorVersionUpgradeSkew {
 	// 	tooLargeUpgradeSkewErr := errors.Errorf("Specified version to upgrade to %q is too high; kubeadm can upgrade only %d minor version at a time", newK8sVersionStr, MaximumAllowedMinorVersionUpgradeSkew)
 	// 	// If the version that we're about to upgrade to is a released version, we should fully enforce this policy
