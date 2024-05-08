@@ -1,0 +1,42 @@
+---
+name: Build kubeadm binary
+ 
+on:
+  push:
+    tag:
+      - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    # 这里我们选择以 tag 的方式惩触发 job 的运行
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+ 
+      - name: Build kubeadm binary
+        shell: bash
+        run: |
+          # 运行 build/run.sh 构建脚本来编译相应平台上的二进制文件
+          build/run.sh make kubeadm KUBE_BUILD_PLATFORMS=linux/amd64
+          build/run.sh make kubeadm KUBE_BUILD_PLATFORMS=linux/arm64
+ 
+      # 构建好的二进制文件存放在 _output/dockerized/bin/ 中
+      # 我们根据二进制目标文件的系统名称+CPU体系架构名称进行命名
+      - name: Prepare for upload
+        shell: bash
+        run: |
+          mv _output/dockerized/bin/linux/amd64/kubeadm kubeadm-linux-amd64
+          mv _output/dockerized/bin/linux/arm64/kubeadm kubeadm-linux-arm64
+          sha256sum kubeadm-linux-{amd64,arm64} > sha256sum.txt
+ 
+      # 使用 softprops/action-gh-release 来将构建产物上传到 GitHub release 当中
+      - name: Release and upload packages
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            sha256sum.txt
+            kubeadm-linux-amd64
+            kubeadm-linux-arm64
