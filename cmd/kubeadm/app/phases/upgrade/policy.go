@@ -29,13 +29,19 @@ import (
 
 const (
 	// MaximumAllowedMinorVersionUpgradeSkew describes how many minor versions kubeadm can upgrade the control plane version in one go
-	MaximumAllowedMinorVersionUpgradeSkew = 1
+	// 改成30
+	// MaximumAllowedMinorVersionUpgradeSkew = 1
+	MaximumAllowedMinorVersionUpgradeSkew = 30
 
 	// MaximumAllowedMinorVersionDowngradeSkew describes how many minor versions kubeadm can upgrade the control plane version in one go
-	MaximumAllowedMinorVersionDowngradeSkew = 1
+	// 改成30
+	// MaximumAllowedMinorVersionDowngradeSkew = 1
+	MaximumAllowedMinorVersionDowngradeSkew = 30
 
 	// MaximumAllowedMinorVersionKubeletSkew describes how many minor versions the control plane version and the kubelet can skew in a kubeadm cluster
-	MaximumAllowedMinorVersionKubeletSkew = 3
+	// 改成30
+	// MaximumAllowedMinorVersionKubeletSkew = 3
+	MaximumAllowedMinorVersionKubeletSkew = 30
 )
 
 // VersionSkewPolicyErrors describes version skew errors that might be seen during the validation process in EnforceVersionPolicies
